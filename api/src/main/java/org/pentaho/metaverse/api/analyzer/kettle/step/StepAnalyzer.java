@@ -66,7 +66,6 @@ public abstract class StepAnalyzer<T extends BaseStepMeta> extends BaseKettleMet
     IStepAnalyzer<T>, IFieldLineageMetadataProvider<T> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( StepAnalyzer.class );
-  public static final String NONE = "_none_";
 
   protected IComponentDescriptor descriptor;
   private StepNodes inputs;

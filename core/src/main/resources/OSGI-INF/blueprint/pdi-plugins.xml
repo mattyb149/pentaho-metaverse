@@ -72,6 +72,27 @@
   </service>
 
   <!-- JobRuntime extension point -->
+  <bean id="jobEntryFinished" scope="singleton" class="org.pentaho.metaverse.analyzer.kettle.extensionpoints.job.entry.JobEntryResultRowsListener"/>
+  <bean id="jobEntryFinishedPlugin" scope="singleton" class="org.pentaho.di.osgi.OSGIPlugin">
+    <property name="mainType" value="org.pentaho.di.core.extension.ExtensionPointInterface"/>
+    <property name="name" value="JobAfterJobEntryExecution"/>
+    <property name="ID" value="jobEntryResultRows"/>
+    <property name="description" value="Process result rows and other job entry artifacts after execution"/>
+    <property name="pluginTypeInterface" value="org.pentaho.di.core.extension.ExtensionPointPluginType"/>
+    <property name="category" value="Data Lineage"/>
+    <property name="classToBeanMap">
+      <map>
+        <entry key="org.pentaho.di.core.extension.ExtensionPointInterface" value="jobEntryFinished"/>
+      </map>
+    </property>
+  </bean>
+  <service id="jobEntryFinishedPluginService" interface="org.pentaho.di.core.plugins.PluginInterface" ref="jobEntryFinishedPlugin">
+    <service-properties>
+      <entry key="PluginType" value="org.pentaho.di.core.extension.ExtensionPointPluginType"/>
+    </service-properties>
+  </service>
+
+  <!-- JobRuntime extension point -->
   <bean id="jobRuntime" scope="singleton" class="org.pentaho.metaverse.analyzer.kettle.extensionpoints.job.JobRuntimeExtensionPoint">
     <property name="documentAnalyzer" ref="JobAnalyzer"/>
     <property name="lineageWriter" ref="lineageWriter"/>

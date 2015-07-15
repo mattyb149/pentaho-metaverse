@@ -109,6 +109,9 @@ public abstract class JobEntryAnalyzer<T extends JobEntryInterface> extends Base
     rootNode.setProperty( "copies", entry.getParentJob().getJobMeta().getJobCopies().size() );
     metaverseBuilder.addNode( rootNode );
 
+    inputs = processInputs( meta );
+    outputs = processOutputs( meta );
+
     customAnalyze( entry, rootNode );
 
     return rootNode;

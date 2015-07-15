@@ -29,6 +29,8 @@ package org.pentaho.metaverse.api;
  */
 public interface IAnalyzer<S, T> extends IRequiresMetaverseBuilder {
 
+  String NONE = "_none_";
+
   /**
    * Analyze the given object.
    * 

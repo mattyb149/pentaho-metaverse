@@ -31,6 +31,7 @@ import org.pentaho.di.job.entry.JobEntryInterface;
 import org.pentaho.di.repository.Repository;
 import org.pentaho.di.repository.RepositoryDirectoryInterface;
 import org.pentaho.di.trans.TransMeta;
+import org.pentaho.di.trans.step.StepMeta;
 import org.pentaho.dictionary.DictionaryConst;
 import org.pentaho.metaverse.api.IComponentDescriptor;
 import org.pentaho.metaverse.api.IMetaverseNode;
@@ -44,6 +45,7 @@ import org.slf4j.LoggerFactory;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -62,9 +64,7 @@ public class TransJobEntryAnalyzer extends JobEntryAnalyzer<JobEntryTrans> {
 
   @Override
   protected void customAnalyze( JobEntryTrans entry, IMetaverseNode rootNode ) throws MetaverseAnalyzerException {
-    // String entryFilename = entry.getFilename();
     TransMeta subTransMeta = null;
-    String name = entry.getName();
     JobMeta parentJobMeta = entry.getParentJob().getJobMeta();
     Repository repo = parentJobMeta.getRepository();
     String transPath = null;
@@ -106,7 +106,7 @@ public class TransJobEntryAnalyzer extends JobEntryAnalyzer<JobEntryTrans> {
           } catch ( KettleException e ) {
             log.error( e.getMessage(), e );
             throw new MetaverseAnalyzerException( "Sub transformation can not be found by reference - "
-                + entry.getTransObjectId(), e );
+              + entry.getTransObjectId(), e );
           }
         } else {
           throw new MetaverseAnalyzerException( "Not connected to a repository, can't get the transformation" );
@@ -115,8 +115,8 @@ public class TransJobEntryAnalyzer extends JobEntryAnalyzer<JobEntryTrans> {
     }
 
     IComponentDescriptor ds =
-        new MetaverseComponentDescriptor( subTransMeta.getName(), DictionaryConst.NODE_TYPE_TRANS,
-          descriptor.getNamespace().getParentNamespace() );
+      new MetaverseComponentDescriptor( subTransMeta.getName(), DictionaryConst.NODE_TYPE_TRANS,
+        descriptor.getNamespace().getParentNamespace() );
 
     IMetaverseNode transformationNode = createNodeFromDescriptor( ds );
     transformationNode.setProperty( DictionaryConst.PROPERTY_NAMESPACE, ds.getNamespaceId() );
@@ -125,6 +125,12 @@ public class TransJobEntryAnalyzer extends JobEntryAnalyzer<JobEntryTrans> {
 
     metaverseBuilder.addLink( rootNode, DictionaryConst.LINK_EXECUTES, transformationNode );
 
+    List<StepMeta> steps = subTransMeta.getSteps();
+    if ( steps != null ) {
+      for ( StepMeta step : steps ) {
+        // If this step is "Copy Rows to Result"
+      }
+    }
   }
 
   protected TransMeta getSubTransMeta( String filePath ) throws FileNotFoundException, KettleXMLException,

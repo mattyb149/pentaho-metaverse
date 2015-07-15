@@ -40,6 +40,7 @@ import org.pentaho.di.trans.steps.rowsfromresult.RowsFromResultMeta;
 import org.pentaho.di.trans.steps.rowstoresult.RowsToResultMeta;
 import org.pentaho.di.trans.steps.transexecutor.TransExecutorMeta;
 import org.pentaho.dictionary.DictionaryConst;
+import org.pentaho.metaverse.api.IAnalyzer;
 import org.pentaho.metaverse.api.IComponentDescriptor;
 import org.pentaho.metaverse.api.IMetaverseNode;
 import org.pentaho.metaverse.api.MetaverseAnalyzerException;
@@ -285,7 +286,7 @@ public class TransExecutorStepAnalyzer extends StepAnalyzer<TransExecutorMeta> {
           RowsFromResultMeta rfrm = (RowsFromResultMeta) step.getStepMetaInterface();
 
           // Create a new descriptor for the RowsFromResult step.
-          IComponentDescriptor stepDescriptor = new MetaverseComponentDescriptor( StepAnalyzer.NONE,
+          IComponentDescriptor stepDescriptor = new MetaverseComponentDescriptor( IAnalyzer.NONE,
             DictionaryConst.NODE_TYPE_TRANS_STEP, subTransNode, descriptor.getContext() );
 
           // Create a new node for the step, to be used as the parent of the the field we want to link to

@@ -29,8 +29,10 @@ import org.pentaho.di.core.extension.ExtensionPoint;
 import org.pentaho.di.core.logging.LogChannelInterface;
 import org.pentaho.di.core.parameters.UnknownParamException;
 import org.pentaho.di.job.Job;
+import org.pentaho.di.job.JobEntryResult;
 import org.pentaho.di.job.JobListener;
 import org.pentaho.di.job.JobMeta;
+import org.pentaho.di.job.entry.JobEntryCopy;
 import org.pentaho.dictionary.DictionaryConst;
 import org.pentaho.metaverse.analyzer.kettle.extensionpoints.BaseRuntimeExtensionPoint;
 import org.pentaho.metaverse.analyzer.kettle.extensionpoints.trans.TransformationRuntimeExtensionPoint;
@@ -118,7 +120,7 @@ public class JobRuntimeExtensionPoint extends BaseRuntimeExtensionPoint implemen
       // Add the job finished listener
       job.addJobListener( this );
 
-      // Analyze the current transformation
+      // Set up an analyzer task for the current job
       if ( documentAnalyzer != null ) {
         documentAnalyzer.setMetaverseBuilder( builder );
 
@@ -296,7 +298,7 @@ public class JobRuntimeExtensionPoint extends BaseRuntimeExtensionPoint implemen
     return filename;
   }
 
-  protected IMetaverseBuilder getMetaverseBuilder( Job job ) {
+  public static IMetaverseBuilder getMetaverseBuilder( Job job ) {
     if ( job != null ) {
       if ( job.getParentJob() == null && job.getParentTrans() == null ) {
         return (IMetaverseBuilder) MetaverseBeanUtil.getInstance().get( "IMetaverseBuilderPrototype" );
